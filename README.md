@@ -4,13 +4,13 @@ A game library for managing a game collection, rating games and adding favorites
 
 ## Milestones
 
-### ✅ 1. Choose Framworks
+### :white_check_mark: 1. Choose Framworks
 
 - Django Rest Backend
 - React-Redux Frontend
 - Bootstrap Styling
 
-### ✅ 2. Create Backend Models
+### :white_check_mark: 2. Create Backend Models
 
 ### Games
 
@@ -26,13 +26,13 @@ A game library for managing a game collection, rating games and adding favorites
 
 - Title
 
-### ✅ 3. Create Rest Api
+### :white_check_mark: 3. Create Rest Api
 
 - create serializers
 - create views
 - create API endpoints for CRUD operations for games and tags
 
-### 🚧 4. Create Frontend App Structure
+### :construction: 4. Create Frontend App Structure
 
 - React-Redux Store
 - Diff function for only sending changes to the backend
@@ -45,17 +45,17 @@ A game library for managing a game collection, rating games and adding favorites
 - View for single game
 - Modal for editing a single game
 
-### 🚧 5. Connect Frontend to Backend
+### :construction: 5. Connect Frontend to Backend
 
 - get data from backend
 - save changes to backend
 
-### 🚧 6. Connect IGDB Api to fetch game information
+### :construction: 6. Connect IGDB Api to fetch game information
 
 - find out appropiate endpoints
 - fetch data into edit fields to allow the user to make manual changes
 
-### 🚧 7. Test Application
+### :construction: 7. Test Application
 
 - Write Backend Tests
 - Write Frontend Tests
