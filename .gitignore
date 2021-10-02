@@ -127,3 +127,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Local
+.DS_Store
+Pipfile
+Pipfile.lock
+
+# Django
+migrations/
+media/
