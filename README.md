@@ -50,14 +50,14 @@ A game library for managing a game collection, rating games and adding favorites
 - get data from backend
 - save changes to backend
 
-## :x: 6. Connect IGDB Api to fetch game information
+### :x: 6. Connect IGDB Api to fetch game information
 
 - find out appropiate endpoints
 - fetch data into edit fields to allow the user to make manual changes
 
-## :x: 7. Test Application
+### :x: 7. Test Application
 
 - Write Backend Tests
 - Write Frontend Tests
 
-## 8. Write print function for games or all favorites  (optional)
+### 8. Write print function for games or all favorites  (optional)
