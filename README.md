@@ -34,10 +34,10 @@ A game library for managing a game collection, rating games and adding favorites
 
 ### 4. Create Frontend App Structure 🚧
 
-- React-Redux Store
+- :white_check_mark: React-Redux Store
 - Diff function for only sending changes to the backend
 - Bootstrap Grid Layout for different device sizes
-- Navbar with Games and Tags
+- :white_check_mark: Navbar with Games and Tags
 - GameTile Component for rendering a single Game as Tile
 - View for game list
 - Filter and search for game list
@@ -60,4 +60,16 @@ A game library for managing a game collection, rating games and adding favorites
 - Write Backend Tests
 - Write Frontend Tests
 
+<<<<<<< Updated upstream
 ## 8. Write print function for games or all favorites  (optional)
+=======
+### 8. Write print function for games or all favorites  (optional)
+
+## Times
+
+Friday, 01.10: 3.5 h
+
+Saturday, 02.10: 3 h
+
+Sunday, 03.10: 3 h
+>>>>>>> Stashed changes

@@ -1,0 +1,9 @@
+$body-bg: #1C2838;
+$body-color:  white;
+
+$theme-colors: (
+    "primary": #3b5e84,
+);
+
+/* import bootstrap to set changes */
+@import "~bootstrap/scss/bootstrap";
