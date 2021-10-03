@@ -61,3 +61,11 @@ A game library for managing a game collection, rating games and adding favorites
 - Write Frontend Tests
 
 ### 8. Write print function for games or all favorites  (optional)
+
+## Times
+
+Friday, 01.10: 3.5 h
+
+Saturday, 02.10: 3 h
+
+Sunday, 03.10:  h

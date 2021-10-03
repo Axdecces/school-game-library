@@ -46,13 +46,22 @@ class GameDetail(APIView):
 
 class GameDelete(APIView):
 	""" api view for deleting a single game via post """
-	def post(self, request, game_id):
+	def post(self, request, game_id, soft_delete=False):
 		game = Game.objects.get(id=game_id)
-		if game.is_deleted == False:
+		if soft_delete:
 			game.soft_delete()
 		else:
-			game.restore()
+			game.delete()
 		return Response(status=status.HTTP_204_NO_CONTENT)
+
+class GameRestore(APIView):
+	""" api view for restoring a single game via post """
+	def post(self, request, game_id):
+		game = Game.objects.get(id=game_id)
+		game.restore()
+
+		serializer = GameSerializer(game)
+		return Response(serializer.data)
 
 
 
@@ -98,13 +107,21 @@ class TagDetail(APIView):
 
 class TagDelete(APIView):
 	""" api view for deleting a single tag via post """
-	def post(self, request, tag_id):
+	def post(self, request, tag_id, soft_delete=False):
 		tag = Tag.objects.get(id=tag_id)
-		if tag.is_deleted == False:
+		if soft_delete:
 			tag.soft_delete()
 		else:
-			tag.restore()
+			tag.delete()
 		return Response(status=status.HTTP_204_NO_CONTENT)
+
+class TagRestore(APIView):
+	""" api view for restoring a single tag via post """
+	def post(self, request, tag_id):
+		tag = Tag.objects.get(id=tag_id)
+		tag.restore()
+		serializer = TagSerializer(tag)
+		return Response(serializer.data)
 
 class ImageDetail(APIView):
 	""" api view for adding a single image via post """
