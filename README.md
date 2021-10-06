@@ -39,11 +39,11 @@ A game library for managing a game collection, rating games and adding favorites
 - Bootstrap Grid Layout for different device sizes
 - :white_check_mark: Navbar with Games and Tags
 - GameTile Component for rendering a single Game as Tile
-- View for game list
+- :construction: View for game list
 - Filter and search for game list
 - View for tag list (editable)
-- View for single game
-- Modal for editing a single game
+- :construction: Modal for single game
+- Page for editing a single game
 
 ### 5. Connect Frontend to Backend
 
@@ -69,4 +69,6 @@ Friday, 01.10: 3.5 h
 Saturday, 02.10: 3 h
 
 Sunday, 03.10: 3 h
+
+Wednesday, 06.10: 2 h
 

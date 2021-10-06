@@ -1,13 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import gamesReducer from '../features/games/gamesSlice';
-import deletedGamesReducer from '../features/games/deletedGamesSlice';
-import tagsReducer from '../features/tagsSlice';
+import gamesReducer from '../features/games/gameSlice';
+import tagsReducer from '../features/tags/tagSlice';
 
 
 export const store = configureStore({
   reducer: {
     games: gamesReducer,
-    deletedGames: deletedGamesReducer,
     tags: tagsReducer
   },
 });

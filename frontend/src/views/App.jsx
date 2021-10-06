@@ -1,5 +1,10 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux'
+import axios from 'axios';
+
 import './App.scss';
+
+import Container from 'react-bootstrap/Container';
 
 import {
   BrowserRouter as Router,
@@ -9,27 +14,38 @@ import {
 } from "react-router-dom";
 
 import Header from './Header';
+import Game from '../features/games/Game'
+
+const baseURL = "http://localhost:8000";
 
 
 
-function Games() {
-  return <h2>Games</h2>;
+function Games(props) {
+  return (
+    <Container fluid>
+      {props.games.map((game => {return <Game id={game.id} />}))}
+    </Container>
+  )
 }
 
 function Tags() {
   return <h2>Tags</h2>;
 }
 
-function DeletedGames() {
-  return <h2>Deleted Games</h2>;
-}
-
-function DeletedTags() {
-  return <h2>Deleted Tags</h2>;
-}
-
 
 function App() {
+  const dispatch = useDispatch()
+
+  React.useEffect(() => {
+    axios.get(`${baseURL}/games`).then((response) => {
+      for (const game in response.data) {
+        dispatch({type: 'games/add', action: game});
+      }
+    });
+  }, []);
+
+  const games = useSelector(state => state.games);
+
 
   return (
     <Router>
@@ -39,10 +55,12 @@ function App() {
           <Route exact path="/">
             <Redirect to="/games/" />
           </Route>
-          <Route exact path="/games/" component={Games} />
-          <Route exact path="/tags/" component={Tags} />
-          <Route exact path="/deleted-games/" component={DeletedGames} />
-          <Route exact path="/deleted-tags/" component={DeletedTags} />
+          <Route exact path="/games/">
+            <Games games={games}/>
+          </Route>
+          <Route exact path="/tags/">
+            <Tags />
+          </Route>
         </Switch>
       </div>
     </Router>

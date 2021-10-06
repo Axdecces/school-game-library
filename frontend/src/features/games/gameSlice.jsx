@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import axios from "axios";
 
 export const gamesSlice = createSlice({
   name: 'games',
@@ -36,11 +37,14 @@ export const gamesSlice = createSlice({
                 }
             }
         })
+    },
+    write: (state, action) => {
+        axios.post();
     }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { add, remove, update } = gamesSlice.actions
+export const { add, remove, update, save } = gamesSlice.actions
 
 export default gamesSlice.reducer
