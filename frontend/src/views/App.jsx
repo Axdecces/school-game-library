@@ -1,10 +1,8 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import axios from 'axios';
 
 import './App.scss';
-
-import Container from 'react-bootstrap/Container';
 
 import {
   BrowserRouter as Router,
@@ -14,19 +12,9 @@ import {
 } from "react-router-dom";
 
 import Header from './Header';
-import Game from '../features/games/Game'
+import GamesList from '../features/games/GamesList'
 
 const baseURL = "http://localhost:8000";
-
-
-
-function Games(props) {
-  return (
-    <Container fluid>
-      {props.games.map((game => {return <Game id={game.id} />}))}
-    </Container>
-  )
-}
 
 function Tags() {
   return <h2>Tags</h2>;
@@ -34,7 +22,7 @@ function Tags() {
 
 
 function App() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
     axios.get(`${baseURL}/games`).then((response) => {
@@ -42,9 +30,7 @@ function App() {
         dispatch({type: 'games/add', action: game});
       }
     });
-  }, []);
-
-  const games = useSelector(state => state.games);
+  }, [dispatch]);
 
 
   return (
@@ -55,9 +41,7 @@ function App() {
           <Route exact path="/">
             <Redirect to="/games/" />
           </Route>
-          <Route exact path="/games/">
-            <Games games={games}/>
-          </Route>
+          <Route exact path="/games/" component={GamesList} />
           <Route exact path="/tags/">
             <Tags />
           </Route>

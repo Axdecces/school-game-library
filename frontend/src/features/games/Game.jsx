@@ -6,6 +6,8 @@ import Col from 'react-bootstrap/Col';
 import Ratio from 'react-bootstrap/Ratio';
 import Fade from 'react-bootstrap/Fade';
 
+import { selectGameById } from './gamesSlice'
+
 import Favorite from './Favorite';
 import Rating from './Rating';
 
@@ -14,9 +16,7 @@ import TagsPreview from '../tags/TagsPreview';
 function Game(props) {
     const gameId = props.id;
 
-    const game = useSelector(state =>
-        state.games.find(game => game.id === gameId)
-    );
+    const game = useSelector(state => selectGameById(state, gameId))
 
     const preview = game.preview;
 

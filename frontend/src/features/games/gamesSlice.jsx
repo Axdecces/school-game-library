@@ -48,3 +48,8 @@ export const gamesSlice = createSlice({
 export const { add, remove, update, save } = gamesSlice.actions
 
 export default gamesSlice.reducer
+
+export const selectAllGames = state => state.games
+
+export const selectGameById = (state, gameId) =>
+  state.games.find(game => game.id === gameId)

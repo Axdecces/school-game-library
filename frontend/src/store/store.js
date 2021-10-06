@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
-import gamesReducer from '../features/games/gameSlice';
-import tagsReducer from '../features/tags/tagSlice';
+import gamesReducer from '../features/games/gamesSlice';
+import tagsReducer from '../features/tags/tagsSlice';
 
 
 export const store = configureStore({
