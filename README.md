@@ -71,4 +71,3 @@ Saturday, 02.10: 3 h
 Sunday, 03.10: 3 h
 
 Wednesday, 06.10: 2 h
-
