@@ -25,11 +25,33 @@ function App() {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    axios.get(`${baseURL}/games`).then((response) => {
-      for (const game in response.data) {
-        dispatch({type: 'games/add', action: game});
-      }
-    });
+    const game1 = {
+      id: 1,
+      title: "CS: GO",
+      description: "Test",
+      is_favorite: true,
+      is_deleted: false,
+      release_date: "2021-10-08",
+      tags: []
+    };
+  
+    const game2 = {
+      id: 2,
+      title: "HL 2",
+      description: "Test",
+      is_favorite: true,
+      is_deleted: false,
+      release_date: "2021-10-08",
+      tags: []
+    };
+  
+    const games = [game1, game2]
+
+    for (let i = 0; i < games.length; i++) {
+      const game = games[i];
+
+      dispatch({type: 'games/add', payload: game });
+    }
   }, [dispatch]);
 
 

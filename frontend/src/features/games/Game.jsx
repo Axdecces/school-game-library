@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
+import './Game.scss';
+
 import Modal from 'react-bootstrap/Modal';
 import Col from 'react-bootstrap/Col';
 import Ratio from 'react-bootstrap/Ratio';
@@ -35,21 +37,26 @@ function Game(props) {
 
     return (
         <Col>
-            <Ratio aspectRatio="4x3">
+            <Ratio aspectRatio="4x3" className='ratio'>
                 <div
-                    style={{ width: '100%', height: 'auto' , backgroundImage: {preview}}}
+                    className='gameTile'
+                    style={{backgroundImage: 'url(/CSGO.png)'}}
                     onClick={handleShow}
                     onMouseEnter={handleEnter}
                     onMouseLeave={handleLeave}
                 >
+                    
                     <Fade in={hover}>
                         <h1>{game.title}</h1>
+                    </Fade>
+                    <Fade in={hover}>
+                        <div className='dark-overlay'></div>
                     </Fade>
                 </div>
             </Ratio>
             
             <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
+                <Modal.Header closeButton closeVariant='white'>
                     <Modal.Title>{ game.title }</Modal.Title>
                     <Favorite isFavorite={game.is_favorite}/>
                 </Modal.Header>
@@ -58,7 +65,7 @@ function Game(props) {
                 </Modal.Body>
                 <Modal.Footer>
                     <Rating rating={game.rating} />
-                    <TagsPreview tags={game.tags} />
+                    {/*<TagsPreview tags={game.tags} />*/}
                 </Modal.Footer>
             </Modal>
         </Col> 

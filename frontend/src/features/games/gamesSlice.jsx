@@ -6,7 +6,8 @@ export const gamesSlice = createSlice({
   initialState: [],
   reducers: {
     add: (state, action) => {
-        state.push(action.payload)
+        console.log(action.payload);
+        state.push(action.payload);
     },
     remove: (state, action) => {
         state = state.filter(e => e.id !== action.payload)
