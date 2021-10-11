@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import './Game.scss';
@@ -7,6 +7,7 @@ import Modal from 'react-bootstrap/Modal';
 import Col from 'react-bootstrap/Col';
 import Ratio from 'react-bootstrap/Ratio';
 import Fade from 'react-bootstrap/Fade';
+import CloseButton from 'react-bootstrap/CloseButton';
 
 import { selectGameById } from './gamesSlice'
 
@@ -36,10 +37,10 @@ function Game(props) {
 
 
     return (
-        <Col>
+        <Col className='game-width'>
             <Ratio aspectRatio="4x3" className='ratio'>
                 <div
-                    className='gameTile'
+                    className='game-tile'
                     style={{backgroundImage: 'url(/CSGO.png)'}}
                     onClick={handleShow}
                     onMouseEnter={handleEnter}
@@ -56,15 +57,16 @@ function Game(props) {
             </Ratio>
             
             <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton closeVariant='white'>
+                <Modal.Header>
                     <Modal.Title>{ game.title }</Modal.Title>
-                    <Favorite isFavorite={game.is_favorite}/>
+                    <Favorite isFavorite={game.is_favorite} gameId={game.id}/>
+                    <CloseButton variant='white' onClick={handleClose}/>
                 </Modal.Header>
                 <Modal.Body>
                     { game.description }
                 </Modal.Body>
                 <Modal.Footer>
-                    <Rating rating={game.rating} />
+                    <Rating rating={game.rating} gameId={game.id} />
                     {/*<TagsPreview tags={game.tags} />*/}
                 </Modal.Footer>
             </Modal>

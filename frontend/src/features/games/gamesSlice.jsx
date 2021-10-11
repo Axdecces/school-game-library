@@ -6,7 +6,6 @@ export const gamesSlice = createSlice({
   initialState: [],
   reducers: {
     add: (state, action) => {
-        console.log(action.payload);
         state.push(action.payload);
     },
     remove: (state, action) => {
@@ -15,26 +14,29 @@ export const gamesSlice = createSlice({
     update: (state, action) => {
         state.forEach(game => {
             if (game.id === action.payload.id) {
-                if (action.payload.title) {
-                    game.title = action.payload.title
+                if (action.payload.title != null) {
+                    game.title = action.payload.title;
                 }
-                if (action.payload.description) {
-                    game.description = action.payload.description
+                if (action.payload.description != null) {
+                    game.description = action.payload.description;
                 }
-                if (action.payload.release_date) {
-                    game.release_date = action.payload.release_date
+                if (action.payload.release_date != null) {
+                    game.release_date = action.payload.release_date;
                 }
-                if (action.payload.is_favorite) {
-                    game.is_favorite = action.payload.is_favorite
+                if (action.payload.rating != null) {
+                    game.rating = action.payload.rating;
                 }
-                if (action.payload.preview) {
-                    game.preview = action.payload.preview
+                if (action.payload.isFavorite != null) {
+                    game.is_favorite = action.payload.isFavorite;
                 }
-                if (action.payload.tags) {
-                    game.tags = action.payload.tags
+                if (action.payload.preview != null) {
+                    game.preview = action.payload.preview;
                 }
-                if (action.payload.is_deleted) {
-                    game.is_deleted = action.payload.is_deleted
+                if (action.payload.tags != null) {
+                    game.tags = action.payload.tags;
+                }
+                if (action.payload.is_deleted != null) {
+                    game.is_deleted = action.payload.isDeleted;
                 }
             }
         })

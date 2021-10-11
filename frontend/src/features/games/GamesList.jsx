@@ -12,8 +12,8 @@ function GamesList() {
     const games = useSelector(selectAllGames);
     if (!!games[0]) {
       return (
-        <Container fluid>
-          <Row xs={1} lg={2} className="g-2">
+        <Container fluid className='game-list'>
+          <Row xs={1} sm={2} lg={3} xxl={4} className="g-5 justify-content-evenly">
             {games.map(game => {return <Game key={game.id} id={game.id} />})}
           </Row>
         </Container>

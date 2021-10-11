@@ -44,8 +44,28 @@ function App() {
       release_date: "2021-10-08",
       tags: []
     };
+
+    const game3 = {
+      id: 3,
+      title: "HL 3",
+      description: "Best game not in existence",
+      is_favorite: true,
+      is_deleted: false,
+      release_date: "2021-10-08",
+      tags: []
+    };
+
+    const game4 = {
+      id: 4,
+      title: "HL 4",
+      description: "Best game not in existence",
+      is_favorite: true,
+      is_deleted: false,
+      release_date: "2021-10-08",
+      tags: []
+    };    
   
-    const games = [game1, game2]
+    const games = [game1, game2, game3, game4]
 
     for (let i = 0; i < games.length; i++) {
       const game = games[i];
