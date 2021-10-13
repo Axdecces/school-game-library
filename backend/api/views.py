@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from api.models import Game, Tag
-from api.serializers import GameSerializer, TagSerializer, ImageSerializer
+from api.serializers import GameSerializer, TagSerializer
 
 class GameViewSet(ModelViewSet):
 	queryset = Game.objects.all()

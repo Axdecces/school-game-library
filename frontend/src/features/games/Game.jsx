@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+
+import { Link } from  'react-router-dom';
 
 import './Game.scss';
 
@@ -7,23 +9,37 @@ import Modal from 'react-bootstrap/Modal';
 import Col from 'react-bootstrap/Col';
 import Ratio from 'react-bootstrap/Ratio';
 import Fade from 'react-bootstrap/Fade';
+import Button from 'react-bootstrap/Button';
 import CloseButton from 'react-bootstrap/CloseButton';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCog } from '@fortawesome/free-solid-svg-icons';
+
 import { selectGameById } from './gamesSlice'
+import { selectAllTags } from '../tags/tagsSlice';
 
 import Favorite from './Favorite';
 import Rating from './Rating';
 
-import TagsPreview from '../tags/TagsPreview';
+import TagsModalPreview from '../tags/TagsModalPreview';
 
 function Game(props) {
-    const gameId = props.id;
+    const game = useSelector(state => selectGameById(state, props.id))
+    const tags = useSelector(selectAllTags);
 
-    const game = useSelector(state => selectGameById(state, gameId))
+    const [gameTags, setGameTags] = useState([]);
+
+    useEffect(() => {
+        var gameTags = [];
+        for (const tag of tags) {
+            gameTags.push({id: tag.id, title: tag.title, selected: game.tags.includes(tag.id) ? true : false})
+        }
+        setGameTags(gameTags);
+    }, [game, tags])
+
+    
 
     const preview = game.preview;
-
-    const dispatch = useDispatch();
 
     const [show, setShow] = useState(false);
 
@@ -60,6 +76,7 @@ function Game(props) {
                 <Modal.Header>
                     <Modal.Title>{ game.title }</Modal.Title>
                     <Favorite isFavorite={game.is_favorite} gameId={game.id}/>
+                    <Button variant='outline-dark' as={Link} to={'/games/' + game.id}><FontAwesomeIcon icon={faCog} /></Button>
                     <CloseButton variant='white' onClick={handleClose}/>
                 </Modal.Header>
                 <Modal.Body>
@@ -67,7 +84,7 @@ function Game(props) {
                 </Modal.Body>
                 <Modal.Footer>
                     <Rating rating={game.rating} gameId={game.id} />
-                    {/*<TagsPreview tags={game.tags} />*/}
+                    <TagsModalPreview tags={gameTags} />
                 </Modal.Footer>
             </Modal>
         </Col> 

@@ -11,6 +11,7 @@ export const tagsSlice = createSlice({
         state = state.filter(e => e.id !== action.payload)
     },
     update: (state, action) => {
+        console.log(action);
         state.forEach(tag => {
             if (tag.id === action.payload.id) {
                 if (action.payload.title) {
@@ -26,3 +27,5 @@ export const tagsSlice = createSlice({
 export const { add, remove, update } = tagsSlice.actions
 
 export default tagsSlice.reducer
+
+export const selectAllTags = state => state.tags

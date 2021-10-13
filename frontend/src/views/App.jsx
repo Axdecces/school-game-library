@@ -1,6 +1,5 @@
 import React from 'react';
 import { useDispatch } from 'react-redux'
-import axios from 'axios';
 
 import './App.scss';
 
@@ -11,14 +10,10 @@ import {
   Redirect,
 } from "react-router-dom";
 
-import Header from './Header';
+import Header from '../features/header/Header';
 import GamesList from '../features/games/GamesList'
-
-const baseURL = "http://localhost:8000";
-
-function Tags() {
-  return <h2>Tags</h2>;
-}
+import GameDetail from '../features/games/GameDetail'
+import TagsList from '../features/tags/TagsList'
 
 
 function App() {
@@ -32,7 +27,7 @@ function App() {
       is_favorite: true,
       is_deleted: false,
       release_date: "2021-10-08",
-      tags: []
+      tags: [1, 2]
     };
   
     const game2 = {
@@ -63,14 +58,35 @@ function App() {
       is_deleted: false,
       release_date: "2021-10-08",
       tags: []
-    };    
+    };
+
+    const tag1 = {
+      id: 1,
+      title: "Multiplayer",
+    };
+    const tag2 = {
+      id: 2,
+      title: "Singleplayer",
+    };
+    const tag3 = {
+      id: 3,
+      title: "MMO",
+    };
+    const tag4 = {
+      id: 4,
+      title: "Open-World",
+    };
   
     const games = [game1, game2, game3, game4]
+    const tags = [tag1, tag2, tag3, tag4]
 
     for (let i = 0; i < games.length; i++) {
       const game = games[i];
-
       dispatch({type: 'games/add', payload: game });
+    }
+    for (let i = 0; i < tags.length; i++) {
+      const tag = tags[i];
+      dispatch({type: 'tags/add', payload: tag });
     }
   }, [dispatch]);
 
@@ -84,9 +100,8 @@ function App() {
             <Redirect to="/games/" />
           </Route>
           <Route exact path="/games/" component={GamesList} />
-          <Route exact path="/tags/">
-            <Tags />
-          </Route>
+          <Route exact path="/categories/" component={TagsList} />
+          <Route exact path="/games/:gameId/" component={GameDetail} />
         </Switch>
       </div>
     </Router>
