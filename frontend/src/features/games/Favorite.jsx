@@ -9,17 +9,8 @@ import { useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/Button'
 
 function Favorite(props) {
-    const dispatch = useDispatch()
-
-    let game = { id: props.gameId }
-
-    const handleClick = () => {
-        game.isFavorite = !props.isFavorite;
-        dispatch({type: 'games/update', payload: game });
-    }
-
     return (
-        <Button className='favorite' variant='outline-dark' onClick={handleClick}>
+        <Button className='favorite' variant='outline-dark' onClick={props.handleClick}>
             {props.isFavorite ? <FontAwesomeIcon icon={fasHeart} /> : <FontAwesomeIcon icon={farHeart} />}
         </Button>
     );

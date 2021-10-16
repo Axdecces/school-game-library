@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Link } from  'react-router-dom';
 
@@ -36,7 +36,6 @@ function Game(props) {
         }
         setGameTags(gameTags);
     }, [game, tags])
-
     
 
     const preview = game.preview;
@@ -50,6 +49,16 @@ function Game(props) {
 
     const handleEnter = () => setHover(true);
     const handleLeave = () => setHover(false);
+
+    const dispatch = useDispatch();
+
+    const handleFavoriteClick = () => {
+        dispatch({type: 'games/update', payload: {id: game.id, isFavorite: !game.is_favorite} });
+    }
+
+    const handleRatingChange = (rating) => {
+        dispatch({type: 'games/update', payload: {id: game.id, rating: rating} });
+    }
 
 
     return (
@@ -75,7 +84,7 @@ function Game(props) {
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header>
                     <Modal.Title>{ game.title }</Modal.Title>
-                    <Favorite isFavorite={game.is_favorite} gameId={game.id}/>
+                    <Favorite isFavorite={game.is_favorite} handleClick={handleFavoriteClick}/>
                     <Button variant='outline-dark' as={Link} to={'/games/' + game.id}><FontAwesomeIcon icon={faCog} /></Button>
                     <CloseButton variant='white' onClick={handleClose}/>
                 </Modal.Header>
@@ -83,7 +92,7 @@ function Game(props) {
                     { game.description }
                 </Modal.Body>
                 <Modal.Footer>
-                    <Rating rating={game.rating} gameId={game.id} />
+                    <Rating rating={game.rating} handleChange={handleRatingChange} />
                     <TagsModalPreview tags={gameTags} />
                 </Modal.Footer>
             </Modal>

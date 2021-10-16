@@ -5,6 +5,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectGameById } from './gamesSlice'
 import { selectAllTags } from "../tags/tagsSlice";
 
+import Favorite from './Favorite';
+import Rating from './Rating';
+
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -19,43 +22,55 @@ function GameDetail(props) {
 	const game = useSelector(state => selectGameById(state, gameId));
 	const tags = useSelector(selectAllTags);
 
+	const [edits, setEdits] = useState({ id: gameId });
+
 	const [gameTags, setGameTags] = useState([]);
 	const [gameTagsChanged, setGameTagsChanged] = useState(false);
 
+	const [isFavorite, setIsFavorite] = useState(false);
+	const [favoriteChanged, setFavoriteChanged] = useState(false);
+
 	useEffect(() => {
-		let gameTags = [];
 		if (game) {
-			gameTags = game.tags
+			setGameTags(game.tags);
+			setIsFavorite(game.is_favorite);
 		}
-        setGameTags(gameTags);
-    }, [game])
+    }, [game]);
 
 	useEffect(() => {
 		if (gameTagsChanged) {
-			edits['tags'] = gameTags;
+			setEdits({...edits, ['tags']: gameTags});
 		}
-	}, [gameTags])
+	}, [gameTags]);
 
-	var edits = { id: gameId }
+	useEffect(() => {
+		if (favoriteChanged) {
+			setEdits({...edits, ['favorite']: isFavorite});
+		}
+	}, [isFavorite]);
 
 	const dispatch = useDispatch();
 
 	function TagsList() {
 		return tags.map(tag => {
-			return <Form.Check
-				label={tag.title}
-				name={tag.id}
-				type='checkbox'
-				id={tag.id}
-				key={tag.id}
-				checked={gameTags.includes(tag.id)}
-				onChange={handleSelect}
-			/>
+			return (
+			<Col key={tag.id} xs='auto'>
+				<Form.Check
+					label={tag.title}
+					name={tag.id}
+					type='checkbox'
+					id={tag.id}
+					checked={gameTags.includes(tag.id)}
+					onChange={handleSelect}
+				/>
+			</Col>
+			)
 		})
+		
 	} 
 
 	const handleChange = (e) => {
-		edits[e.target.id] = e.target.value;
+		setEdits({...edits, [e.target.id]: e.target.value});
 	}
 
 	const handleSelect = (e) => {
@@ -67,9 +82,19 @@ function GameDetail(props) {
 		};
 	}
 
+	const handleFavoriteClick = () => {
+		setFavoriteChanged(true);
+		setIsFavorite(!isFavorite);
+    }
+
+	const handleRatingChange = (rating) => {
+		setEdits({...edits, ['rating']: rating });
+	}
+
 	const handleSave  = () => {
 		console.log(edits);
 		dispatch({ type: 'games/update', payload: edits });
+		setEdits({ id: gameId });
 	}
 
 	return (
@@ -94,10 +119,20 @@ function GameDetail(props) {
 							<Form.Label>Description</Form.Label>
 							<Form.Control as='textarea' rows={3} defaultValue={game && game.description} onChange={handleChange}/>
 						</Form.Group>
-
-						{game && tags && <Row className='mb-3'>{<TagsList />}</Row>}
-  						
-  						
+						<Row className='mb-3'>
+							{game && tags && <TagsList />}
+							
+							<Col>
+							</Col>
+						</Row>
+						<Row className='mb-3'>
+							<Col xs='auto'>
+								<Favorite isFavorite={isFavorite} handleClick={handleFavoriteClick} />
+							</Col>
+							<Col xs='auto'>
+								<Rating rating={game && game.rating} handleChange={handleRatingChange} />
+							</Col>
+						</Row>
 						<Row className='mb-3'>
 							<Col xs='auto'>
 								<Button onClick={handleSave} className='mb-2'>
