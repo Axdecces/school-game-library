@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -11,25 +11,64 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button'
 
 import Form from 'react-bootstrap/Form';
-import TagsEditView from "../tags/TagsEditView";
 
 
 
 function GameDetail(props) {
-	const game = useSelector(state => selectGameById(state, parseInt(props.match.params.gameId)));
+	const gameId = parseInt(props.match.params.gameId)
+	const game = useSelector(state => selectGameById(state, gameId));
 	const tags = useSelector(selectAllTags);
+
+	const [gameTags, setGameTags] = useState([]);
+	const [gameTagsChanged, setGameTagsChanged] = useState(false);
+	const [edits, setEdits] = useState({id: gameId})
+
+	useEffect(() => {
+		let gameTags = [];
+		if (game) {
+			gameTags = game.tags
+		}
+        setGameTags(gameTags);
+    }, [game])
+
+	useEffect(() => {
+		if (gameTagsChanged) {
+			setEdits({...edits, 'tags': gameTags})
+		}
+	}, [gameTags])
 
 	const dispatch = useDispatch();
 
-	var edits = {};
+	function TagsList() {
+		return tags.map(tag => {
+			return <Form.Check
+				label={tag.title}
+				name={tag.id}
+				type='checkbox'
+				id={tag.id}
+				key={tag.id}
+				checked={gameTags.includes(tag.id)}
+				onChange={handleSelect}
+			/>
+		})
+	} 
 
 	const handleChange = (e) => {
-		edits[e.target.id] = e.target.value;
+		setEdits({...edits, [e.target.id]: e.target.value});
+	}
+
+	const handleSelect = (e) => {
+		setGameTagsChanged(true);
+		if (e.target.checked){
+			setGameTags([...gameTags, parseInt(e.target.id)])
+		} else {
+			setGameTags(gameTags.filter((tag) => tag != e.target.id))
+		};
 	}
 
 	const handleSave  = () => {
-		edits['id'] = game.id
-		dispatch({ type: 'games/update', payload: edits })
+		console.log(edits);
+		dispatch({ type: 'games/update', payload: edits });
 	}
 
 	return (
@@ -55,7 +94,7 @@ function GameDetail(props) {
 							<Form.Control as='textarea' rows={3} defaultValue={game && game.description} onChange={handleChange}/>
 						</Form.Group>
 
-						{game && tags && <TagsEditView tags={tags} />}
+						{game && tags && <Row className='mb-3'>{<TagsList />}</Row>}
   						
   						
 						<Row className='mb-3'>
