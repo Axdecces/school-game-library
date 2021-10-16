@@ -21,7 +21,6 @@ function GameDetail(props) {
 
 	const [gameTags, setGameTags] = useState([]);
 	const [gameTagsChanged, setGameTagsChanged] = useState(false);
-	const [edits, setEdits] = useState({id: gameId})
 
 	useEffect(() => {
 		let gameTags = [];
@@ -33,9 +32,11 @@ function GameDetail(props) {
 
 	useEffect(() => {
 		if (gameTagsChanged) {
-			setEdits({...edits, 'tags': gameTags})
+			edits['tags'] = gameTags;
 		}
 	}, [gameTags])
+
+	var edits = { id: gameId }
 
 	const dispatch = useDispatch();
 
@@ -54,7 +55,7 @@ function GameDetail(props) {
 	} 
 
 	const handleChange = (e) => {
-		setEdits({...edits, [e.target.id]: e.target.value});
+		edits[e.target.id] = e.target.value;
 	}
 
 	const handleSelect = (e) => {
