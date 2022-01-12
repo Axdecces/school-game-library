@@ -22,7 +22,7 @@ function Header() {
 
   useEffect(() => {
     dispatch({type: 'header/setActive', payload: location.pathname });
-  }, [location]);
+  }, [location, dispatch]);
   
 
 	return (

@@ -3,10 +3,9 @@ $body-color:  white;
 $modal-content-bg: #1C2838;
 $form-check-input-checked-bg-color: #3b5e84;
 $form-check-input-border: 1px solid white;
+$form-file-button-bg: #3b5e84;
 
-$theme-colors: (
-    "primary": #3b5e84,
-);
+$primary: #3b5e84;
 
 /* import bootstrap to set changes */
 @import "~bootstrap/scss/bootstrap";

@@ -6,6 +6,7 @@ import { Link } from  'react-router-dom';
 import './Game.scss';
 
 import Modal from 'react-bootstrap/Modal';
+import Stack from 'react-bootstrap/Stack';
 import Col from 'react-bootstrap/Col';
 import Ratio from 'react-bootstrap/Ratio';
 import Fade from 'react-bootstrap/Fade';
@@ -83,10 +84,12 @@ function Game(props) {
             
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header>
-                    <Modal.Title>{ game.title }</Modal.Title>
-                    <Favorite isFavorite={game.is_favorite} handleClick={handleFavoriteClick}/>
-                    <Button variant='outline-dark' as={Link} to={'/games/' + game.id}><FontAwesomeIcon icon={faCog} /></Button>
-                    <CloseButton variant='white' onClick={handleClose}/>
+                <Stack className='w-100' direction="horizontal" gap={2}>
+                    <Modal.Title className='me-auto'>{ game.title }</Modal.Title>
+                    <Favorite className='ms-auto'  isFavorite={game.is_favorite} handleClick={handleFavoriteClick}/>
+                    <Button variant='primary' as={Link} to={'/games/' + game.id}><FontAwesomeIcon icon={faCog} /></Button>
+                    <CloseButton className='ms-0' variant='white' onClick={handleClose}/>
+                </Stack>
                 </Modal.Header>
                 <Modal.Body>
                     { game.description }

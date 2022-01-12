@@ -11,7 +11,9 @@ import Rating from './Rating';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button'
+import Button from 'react-bootstrap/Button';
+import Toast from 'react-bootstrap/Toast';
+import ToastContainer from 'react-bootstrap/ToastContainer';
 
 import Form from 'react-bootstrap/Form';
 
@@ -30,6 +32,11 @@ function GameDetail(props) {
 	const [isFavorite, setIsFavorite] = useState(false);
 	const [favoriteChanged, setFavoriteChanged] = useState(false);
 
+	const [showToast, setShowToast] = useState(false);
+
+	const [titleInvalid, setTitleInvalid] = useState(false);
+	const [descriptionInvalid, setDescriptionInvalid]  = useState(false);
+
 	useEffect(() => {
 		if (game) {
 			setGameTags(game.tags);
@@ -39,21 +46,20 @@ function GameDetail(props) {
 
 	useEffect(() => {
 		if (gameTagsChanged) {
-			setEdits({...edits, ['tags']: gameTags});
+			setEdits(edits => { return {...edits, tags: gameTags} });
 		}
-	}, [gameTags]);
+	}, [gameTags, gameTagsChanged]);
 
 	useEffect(() => {
 		if (favoriteChanged) {
-			setEdits({...edits, ['favorite']: isFavorite});
+			setEdits(edits => { return {...edits, isFavorite: isFavorite}});
 		}
-	}, [isFavorite]);
+	}, [isFavorite, favoriteChanged]);
 
 	const dispatch = useDispatch();
 
 	function TagsList() {
-		return tags.map(tag => {
-			return (
+		return tags.map(tag => 
 			<Col key={tag.id} xs='auto'>
 				<Form.Check
 					label={tag.title}
@@ -64,8 +70,7 @@ function GameDetail(props) {
 					onChange={handleSelect}
 				/>
 			</Col>
-			)
-		})
+		)
 		
 	} 
 
@@ -78,7 +83,7 @@ function GameDetail(props) {
 		if (e.target.checked){
 			setGameTags([...gameTags, parseInt(e.target.id)])
 		} else {
-			setGameTags(gameTags.filter((tag) => tag != e.target.id))
+			setGameTags(gameTags.filter((tag) => tag !== parseInt(e.target.id)))
 		};
 	}
 
@@ -88,13 +93,37 @@ function GameDetail(props) {
     }
 
 	const handleRatingChange = (rating) => {
-		setEdits({...edits, ['rating']: rating });
+		setEdits({...edits, rating: rating });
 	}
 
 	const handleSave  = () => {
-		console.log(edits);
+		if (edits.title === '' || edits.description === '') {
+			if (edits.title === '') {
+				setTitleInvalid(true);
+			}
+			if (edits.description === '') {
+				setDescriptionInvalid(true);
+			}
+			console.log('Validation faulty')
+			return
+		} else {
+			setTitleInvalid(false);
+			setDescriptionInvalid(false);
+		}
+
+
+		console.log(edits)
 		dispatch({ type: 'games/update', payload: edits });
 		setEdits({ id: gameId });
+		setShowToast(true);
+	}
+
+	const handleDelete = () => {
+		console.log('Delte game')
+	}
+
+	const handleFileUpload = (e) => {
+		console.log(e)
 	}
 
 	return (
@@ -110,33 +139,54 @@ function GameDetail(props) {
 				<Col />
 				<Col xs={10}>
 					<Form>
-						<Form.Group as={Row} className='mb-3' controlId='title'>
-							<Form.Label>Title</Form.Label>
-							<Form.Control type='text' defaultValue={game && game.title} placeholder='Title of the game' onChange={handleChange}/>
-						</Form.Group>
-					
-						<Form.Group as={Row} className='mb-3' controlId='description'>
-							<Form.Label>Description</Form.Label>
-							<Form.Control as='textarea' rows={3} defaultValue={game && game.description} onChange={handleChange}/>
-						</Form.Group>
-						<Row className='mb-3'>
-							{game && tags && <TagsList />}
-							
-							<Col>
-							</Col>
+						<Row className='mb-3 g-1'>
+							<Form.Group className='mb-3' controlId='title'>
+								<Form.Label>Title</Form.Label>
+								<Form.Control required type='text' defaultValue={game && game.title} placeholder='Title of the game' onChange={handleChange} isInvalid={titleInvalid}/>
+							</Form.Group>
 						</Row>
-						<Row className='mb-3'>
+						
+
+						<Row className='mb-3 g-1'>
+							<Form.Group className='mb-3' controlId='description'>
+								<Form.Label>Description</Form.Label>
+								<Form.Control required as='textarea' rows={3} defaultValue={game && game.description} onChange={handleChange} isInvalid={descriptionInvalid}/>
+							</Form.Group>
+						</Row>
+						<Row className='mb-3 g-2'>
+							<Form.Label>Categories</Form.Label>
+							{game && tags && <TagsList />}
+						</Row>
+						<Row className='mb-3 align-items-center g-2'>
 							<Col xs='auto'>
+								<Form.Label className='m-0'>Favorite?</Form.Label>
+							</Col>
+							<Col xs='auto' className='me-3'>
 								<Favorite isFavorite={isFavorite} handleClick={handleFavoriteClick} />
+							</Col>
+							<Col xs='auto'>
+								<Form.Label className='m-0'>Rating</Form.Label>
 							</Col>
 							<Col xs='auto'>
 								<Rating rating={game && game.rating} handleChange={handleRatingChange} />
 							</Col>
 						</Row>
-						<Row className='mb-3'>
+
+						<Row className='mb-3 g-2'>
+							<Form.Group controlId="preview">
+							<Form.Label>Preview</Form.Label>
+							<Form.Control type='file' bg='primary' onChange={handleFileUpload}/>
+							</Form.Group>
+						</Row>
+						<Row className='mb-3 g-2'>
 							<Col xs='auto'>
-								<Button onClick={handleSave} className='mb-2'>
+								<Button onClick={handleSave}>
 									Save Changes
+								</Button>
+							</Col>
+							<Col xs='auto'>
+								<Button variant='danger' onClick={handleDelete}>
+									Delete Game
 								</Button>
 							</Col>
 						</Row>
@@ -144,7 +194,11 @@ function GameDetail(props) {
 				</Col>
 				<Col />
 			</Row>
-
+			<ToastContainer className='p-3 w-auto' position='bottom-center'>
+				<Toast bg='primary' onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide>
+					<Toast.Body>Änderungen gespeichert.</Toast.Body>
+				</Toast>
+			</ToastContainer>
 		</Container>
 	);
 }

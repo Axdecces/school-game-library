@@ -27,8 +27,8 @@ class Game(models.Model):
 	title = models.CharField(max_length=120)
 	description = models.TextField()
 	tags = models.ManyToManyField(Tag, blank=True)
-	rating = models.IntegerField()
-	is_favorite = models.BooleanField()
+	rating = models.IntegerField(default=1)
+	is_favorite = models.BooleanField(default=False)
 	image = models.ImageField(blank=True)
 	is_deleted = models.BooleanField(default=False)
 
