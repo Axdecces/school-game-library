@@ -2,6 +2,68 @@
 
 A game library for managing a game collection, rating games and adding favorites.
 
+## Installation
+
+### Requirements
+
+- Node.js with NPM
+- Python 3.9
+- Pipenv
+- IGDB API Account
+
+### Backend (Django)
+
+Run commands only in the respcetive folder!
+
+Install required pip packages with pipenv.
+
+```console
+pipenv install
+```
+
+Start django dev server.
+
+```console
+pipenv run python manage.py runserver
+```
+
+(optional) Initialize SQlite Database.
+
+```console
+pipenv run python manage.py makemigrations
+pipenv run python manage.py migrate
+```
+
+### Frontend (React)
+
+Install Node Modules.
+
+```console
+npm install
+```
+
+Start react dev  server.
+
+```console
+npm start
+```
+
+Get Twitch Api Key by following the [About Page](https://api-docs.igdb.com/#about) and paste the Client-ID and the Api-Token into /frontend/src/feature/games/apiAuth.js. The token has to be renewed manually, which is suboptimal and not usable in production.
+
+### CORS Proxy
+
+Install Node Modules.
+
+```console
+npm install
+```
+
+Start proxy server for adding cors header.
+
+```console
+npm start
+```
+
 ## Milestones
 
 ### :white_check_mark: 1. Choose Framworks
@@ -16,7 +78,6 @@ A game library for managing a game collection, rating games and adding favorites
 
 - Title
 - Description
-- Release Date
 - Favorite
 - Preview
 - Tags (ManyToMany)
@@ -26,46 +87,33 @@ A game library for managing a game collection, rating games and adding favorites
 
 - Title
 
-### :white_check_mark: 3. Create Rest Api
+### 3. :white_check_mark: Create Rest Api
 
-- create serializers
-- create views
-- create API endpoints for CRUD operations for games and tags
+- :white_check_mark: create serializers
+- :white_check_mark: create views
+- :white_check_mark: create API endpoints for CRUD operations for games and tags
 
-### :construction: 4. Create Frontend App Structure
+### 4. :white_check_mark: Create Frontend App Structure
 
-- React-Redux Store
-- Diff function for only sending changes to the backend
-- Bootstrap Grid Layout for different device sizes
-- Navbar with Games and Tags
-- GameTile Component for rendering a single Game as Tile
-- View for game list
-- Filter and search for game list
-- View for tag list (editable)
-- View for single game
-- Modal for editing a single game
+- :white_check_mark: React-Redux Store
+- :negative_squared_cross_mark: Diff function for only sending changes to the backend
+- :white_check_mark: Bootstrap Grid Layout for different device sizes
+- :white_check_mark: Navbar with Games and Tags
+- :white_check_mark: GameTile Component for rendering a single Game as Tile
+- :white_check_mark: View for game list
+- :white_check_mark: Filter and search for game list
+- :white_check_mark: View for tag list (editable)
+- :white_check_mark: Modal for single game
+- :white_check_mark: Page for editing a single game
 
-### :construction: 5. Connect Frontend to Backend
+### 5. :white_check_mark: Connect Frontend to Backend
 
-- get data from backend
-- save changes to backend
+- :white_check_mark: get data from backend
+- :white_check_mark: save changes to backend
 
-### :construction: 6. Connect IGDB Api to fetch game information
+## 6. :white_check_mark: Connect IGDB Api to fetch game information
 
-- find out appropiate endpoints
-- fetch data into edit fields to allow the user to make manual changes
+- :white_check_mark: find out appropiate endpoints
+- :white_check_mark: fetch data into edit fields to allow the user to make manual changes
 
-### :construction: 7. Test Application
-
-- Write Backend Tests
-- Write Frontend Tests
-
-### 8. Write print function for games or all favorites  (optional)
-
-## Times
-
-Friday, 01.10: 3.5 h
-
-Saturday, 02.10: 3 h
-
-Sunday, 03.10:  h
+## 7. :negative_squared_cross_mark: Write print function for 

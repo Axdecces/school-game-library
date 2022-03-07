@@ -1,0 +1,34 @@
+.game-tile {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    border-radius: 5px;
+    background-color: #1C2838;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    h1 {
+        font-size: 2em;
+        z-index: 1;
+        text-overflow: ellipsis;
+    }
+}
+
+.dark-overlay {
+	background-color: rgba(0, 0, 0, 0.65);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    border-radius: 5px;
+}
+
+.break-word {
+    max-width: 20ch;
+    word-wrap: break-word;
+}

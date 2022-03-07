@@ -136,3 +136,8 @@ Pipfile.lock
 # Django
 migrations/
 media/
+frontend/package-lock.json
+
+# Node
+node_modules/
+package-lock.json
