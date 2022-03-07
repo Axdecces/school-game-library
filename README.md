@@ -66,13 +66,13 @@ npm start
 
 ## Milestones
 
-### 1. :white_check_mark: Choose Framworks
+### :white_check_mark: 1. Choose Framworks
 
 - Django Rest Backend
 - React-Redux Frontend
 - Bootstrap Styling
 
-### 2. :white_check_mark: Create Backend Models
+### :white_check_mark: 2. Create Backend Models
 
 ### Games
 
@@ -116,4 +116,4 @@ npm start
 - :white_check_mark: find out appropiate endpoints
 - :white_check_mark: fetch data into edit fields to allow the user to make manual changes
 
-## 7. :negative_squared_cross_mark: Write print function for games or all favorites  (optional)
+## 7. :negative_squared_cross_mark: Write print function for 
