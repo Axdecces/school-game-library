@@ -116,6 +116,4 @@ npm start
 - :white_check_mark: find out appropiate endpoints
 - :white_check_mark: fetch data into edit fields to allow the user to make manual changes
 
-### 8. :negative_squared_cross_mark: Write print function for games or all favorites  (optional)
-
-Total 
+## 7. :negative_squared_cross_mark: Write print function for games or all favorites  (optional)
