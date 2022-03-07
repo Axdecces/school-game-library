@@ -9,24 +9,25 @@ A game library for managing a game collection, rating games and adding favorites
 - Node.js with NPM
 - Python 3.9
 - Pipenv
+- IGDB API Account
 
 ### Backend (Django)
 
-Run commands only in the according folder!
+Run commands only in the respcetive folder!
 
-Install required pip packages with pipenv
+Install required pip packages with pipenv.
 
 ```console
 pipenv install
 ```
 
-Start django dev server
+Start django dev server.
 
 ```console
 pipenv run python manage.py runserver
 ```
 
-(optional) Initialize SQlite Database
+(optional) Initialize SQlite Database.
 
 ```console
 pipenv run python manage.py makemigrations
@@ -35,17 +36,19 @@ pipenv run python manage.py migrate
 
 ### Frontend (React)
 
-Install Node Modules
+Install Node Modules.
 
 ```console
 npm install
 ```
 
-Start react dev  server
+Start react dev  server.
 
 ```console
 npm start
 ```
+
+Get Twitch Api Key by following the [About Page](https://api-docs.igdb.com/#about) and paste the Client-ID and the Api-Token into /frontend/src/feature/games/apiAuth.js
 
 ### CORS Proxy
 
