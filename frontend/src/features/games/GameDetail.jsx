@@ -81,7 +81,6 @@ function GameDetail(props) {
 
 	const handleSelect = (e) => {
 		if (e.target.checked){
-			console.log(data)
 			setData({...data, tags: [...data.tags, parseInt(e.target.id)]});
 		} else {
 			setData({...data, tags: [data.tags.filter((tag) => tag !== parseInt(e.target.id))]});
@@ -89,7 +88,6 @@ function GameDetail(props) {
 	}
 
 	const handleSave  = () => {
-		console.log(data)
 		if (data.title === '' || data.description === '') {
 			if (data.title === '') {
 				setTitleInvalid(true);
@@ -97,7 +95,6 @@ function GameDetail(props) {
 			if (data.description === '') {
 				setDescriptionInvalid(true);
 			}
-			console.log('Validation faulty')
 			return
 		} else {
 			setTitleInvalid(false);
@@ -152,10 +149,7 @@ function GameDetail(props) {
 
 				} else {
 					setData(state => {return {...state, title: igdbData[0].name, description: igdbData[0].summary}});
-					console.log(data);
 					const image = igdbData[0].cover.image_id;
-
-					setShowSpinner(false);
 
 					setImageUrl(`https://images.igdb.com/igdb/image/upload/t_720p/${image}.jpg`);
 					axios({
@@ -168,6 +162,7 @@ function GameDetail(props) {
         					reader.readAsDataURL(res.data); 
 							setImageLoaded(false);
         					reader.onload = () => {
+								setShowSpinner(false);
 								setData(state => {return {...state, image: reader.result}});
 								setImageLoaded(true);
         					}

@@ -26,7 +26,7 @@ function TagsList() {
 		setShow(false);
 		setSelectedTag(0);
 	};
-	
+
 	const handleShow = id => {
 		setShow(true);
 		setSelectedTag(id);
@@ -52,7 +52,6 @@ function TagsList() {
 	}
 
 	const handleSaveChanges = () => {
-		console.log(edits);
 		for (const message of edits) {
 			dispatch(updateTag(message))
 		};

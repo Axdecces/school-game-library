@@ -95,7 +95,6 @@ function GameCreate() {
 			if (!data.image) {
 				setImageInvalid(true);
 			}
-			console.log('Validation faulty')
 			return
 		} else {
 			setTitleInvalid(false);
@@ -147,8 +146,6 @@ function GameCreate() {
 					setData(state => {return {...state, title: igdbData[0].name, description: igdbData[0].summary}});
 					const image = igdbData[0].cover.image_id;
 
-					setShowSpinner(false);
-
 					setImageUrl(`https://images.igdb.com/igdb/image/upload/t_720p/${image}.jpg`);
 					axios({
 						url : `http://localhost:8080/https://images.igdb.com/igdb/image/upload/t_720p/${image}.jpg`,
@@ -160,6 +157,7 @@ function GameCreate() {
         					reader.readAsDataURL(res.data); 
 							setImageLoaded(false);
         					reader.onload = () => {
+								setShowSpinner(false);
 								setData(state => {return {...state, image: reader.result}});
 								setImageLoaded(true);
         					}
