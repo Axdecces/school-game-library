@@ -1,5 +1,3 @@
-from functools import partial
-from rest_framework.views import APIView
 from rest_framework.viewsets  import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -24,10 +22,10 @@ class GameViewSet(ModelViewSet):
 		game.restore()
 		return Response(status=status.HTTP_204_NO_CONTENT)
 	
-	@action(detail=True, methods=['PUT'], url_path='set-image')
+	@action(detail=True,  methods=['POST'], url_path='set-image')
 	def set_image(self, request, pk=None):
-		game = self.get_object()
-		serializer = GameSerializer(game, data=request.data)
+		game = self.get_object();
+		serializer = GameSerializer(game, data=request.data, context={'request': request}, partial=True);
 		if serializer.is_valid():
 			serializer.save()
 			return Response(serializer.data)

@@ -16,7 +16,7 @@ import CloseButton from 'react-bootstrap/CloseButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 
-import { selectGameById } from './gamesSlice'
+import { selectGameById, updateGame } from './gamesSlice'
 import { selectAllTags } from '../tags/tagsSlice';
 
 import Favorite from './Favorite';
@@ -25,21 +25,22 @@ import Rating from './Rating';
 import TagsModalPreview from '../tags/TagsModalPreview';
 
 function Game(props) {
-    const game = useSelector(state => selectGameById(state, props.id))
+    const game = useSelector(state => selectGameById(state, props.id));
+    
     const tags = useSelector(selectAllTags);
 
     const [gameTags, setGameTags] = useState([]);
 
     useEffect(() => {
-        var gameTags = [];
-        for (const tag of tags) {
-            gameTags.push({id: tag.id, title: tag.title, selected: game.tags.includes(tag.id) ? true : false})
+        if (!!game) {
+            var gameTags = [];
+            for (const tag of tags) {
+                gameTags.push({id: tag.id, title: tag.title, selected: game.tags.includes(tag.id) ? true : false})
+            }
+            setGameTags(gameTags);
         }
-        setGameTags(gameTags);
     }, [game, tags])
     
-
-    const preview = game.preview;
 
     const [show, setShow] = useState(false);
 
@@ -54,20 +55,20 @@ function Game(props) {
     const dispatch = useDispatch();
 
     const handleFavoriteClick = () => {
-        dispatch({type: 'games/update', payload: {id: game.id, isFavorite: !game.is_favorite} });
+        dispatch(updateGame({ id: game.id, is_favorite: !game.is_favorite }));
     }
 
     const handleRatingChange = (rating) => {
-        dispatch({type: 'games/update', payload: {id: game.id, rating: rating} });
+        dispatch(updateGame({ id: game.id, rating: rating}))
     }
 
-
     return (
-        <Col className='game-width'>
-            <Ratio aspectRatio="4x3" className='ratio'>
+        game ?
+        <Col>
+            <Ratio aspectRatio='1x1' className='ratio'>
                 <div
                     className='game-tile'
-                    style={{backgroundImage: 'url(/CSGO.png)'}}
+                    style={{backgroundImage: `url(${game.image})`}}
                     onClick={handleShow}
                     onMouseEnter={handleEnter}
                     onMouseLeave={handleLeave}
@@ -85,21 +86,23 @@ function Game(props) {
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header>
                 <Stack className='w-100' direction="horizontal" gap={2}>
-                    <Modal.Title className='me-auto'>{ game.title }</Modal.Title>
+                    <Modal.Title className='me-auto break-word'>{ game.title }</Modal.Title>
                     <Favorite className='ms-auto'  isFavorite={game.is_favorite} handleClick={handleFavoriteClick}/>
                     <Button variant='primary' as={Link} to={'/games/' + game.id}><FontAwesomeIcon icon={faCog} /></Button>
                     <CloseButton className='ms-0' variant='white' onClick={handleClose}/>
                 </Stack>
                 </Modal.Header>
                 <Modal.Body>
-                    { game.description }
+                    <p style={{whiteSpace: 'pre-line'}}>{ game.description }</p>
                 </Modal.Body>
                 <Modal.Footer>
                     <Rating rating={game.rating} handleChange={handleRatingChange} />
                     <TagsModalPreview tags={gameTags} />
                 </Modal.Footer>
             </Modal>
-        </Col> 
+        </Col>
+        :
+        null
     );
 }
 

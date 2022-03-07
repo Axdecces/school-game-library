@@ -5,7 +5,8 @@
 	z-index: 1000;
 	width: 3.5rem;
 
-	Button {
+
+	.round {
 		border-radius: 50%;
 	}
 
@@ -13,5 +14,5 @@
 
 .icon {
 	display: block;
-	margin: 0 auto;
+	margin: .27rem auto;
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 
 import Container from 'react-bootstrap/Container';
@@ -6,47 +6,76 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import CloseButton from 'react-bootstrap/CloseButton';
+import Modal from 'react-bootstrap/Modal'
 
-import { selectAllTags } from "././tagsSlice";
+import { createTag, deleteTag, selectAllTags, updateTag } from "././tagsSlice";
 
 
 function TagsList() {
     const tags = useSelector(selectAllTags);
+
+	const [edits, setEdits] = useState([]);
+	const [visibleTags, setVisibleTags] = useState(tags);
+	const [newTagTitle, setNewTagTitle] = useState('');
+	
+	const [show, setShow] = useState(false);
+	const [selectedTag, setSelectedTag] = useState(0);
+
+  	const handleClose = () => {
+		setShow(false);
+		setSelectedTag(0);
+	};
+	const handleShow = id => {
+		setShow(true);
+		setSelectedTag(id);
+	}
 	
 	const dispatch = useDispatch();
 
-	var edits = []
+	useEffect(() => {
+		setVisibleTags(tags)
+	}, [tags])
 
-	var newTagTitle = '';
-
-	const handleChange = (e) => {
+	const handleChange = e => {
 		const id = parseInt(e.target.id);
 		const title = e.target.value;
 
-		let prevEdit = edits.find(edit => edit.id === id);
-		if (prevEdit) {
-			prevEdit.title = title
-		} else {
-			edits.push({id: id, title: title})
-		}
+		setEdits([...edits.filter(message => message.id !== id), {id: id, title: title}]);
+	}
+
+	const handleDelete = () => {
+		dispatch(deleteTag(selectedTag));
+		setVisibleTags(visibleTags.filter(tag => tag.id !== selectedTag));
+		handleClose()
 	}
 
 	const handleSaveChanges = () => {
-		for (const tag of edits) {
-			dispatch({type: 'tags/update', payload: tag})
-		}
-		edits = []
+		console.log(edits);
+		for (const message of edits) {
+			dispatch(updateTag(message))
+		};
+		setEdits([]);
 	}
 
-	const handleNewTagChange = (e) => {
-		newTagTitle = e.target.value;
+	const handleNewTagChange = e => {
+		setNewTagTitle(e.target.value);
 	}
 
 	const handleCreateNew = () => {
-		console.log(newTagTitle);
+		dispatch(createTag({title: newTagTitle}));
+		setNewTagTitle('');
 	}
 
-	const tagsList = tags.map((tag) => <Col key={tag.id}><Form.Control id={tag.id} type='text' defaultValue={tag.title} placeholder='Name of the Category' onChange={handleChange}/></Col>)
+	const tagsList = visibleTags.map((tag) => 
+		<Row key={tag.id} className="g-1 justify-space-between align-items-center">
+			<Col sm={11}>
+				<Form.Control id={tag.id} type='text' defaultValue={tag.title} placeholder='Name of the Category' onChange={handleChange}/>
+			</Col>
+			<Col sm={1}>
+				<CloseButton id={tag.id} variant="white" style={{marginLeft: '-35px'}} onClick={() => handleShow(tag.id)}/>
+			</Col>
+		</Row>)
 
 	return (
 		<Container fluid>
@@ -78,6 +107,7 @@ function TagsList() {
         							className="mb-2"
         							label="New Category"
 									onChange={handleNewTagChange}
+									value={newTagTitle}
       							/>
     						</Col>
 							<Col xs='auto'>
@@ -90,7 +120,22 @@ function TagsList() {
 				</Col>
 				<Col />
           	</Row>
+		<Modal show={show} onHide={handleClose}>
+        	<Modal.Header closeButton>
+          		<Modal.Title>Delete Category?</Modal.Title>
+        	</Modal.Header>
+        	<Modal.Body>This will also delete the category from all games it is assigned to.</Modal.Body>
+        	<Modal.Footer>
+          		<Button variant="secondary" onClick={handleClose}>
+            		No
+          		</Button>
+          		<Button variant="primary" onClick={handleDelete}>
+            		Yes
+          		</Button>
+        	</Modal.Footer>
+      		</Modal>
         </Container>
+		
 	)
 }
 

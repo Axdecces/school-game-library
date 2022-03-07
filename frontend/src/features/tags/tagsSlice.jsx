@@ -1,30 +1,57 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import axios from 'axios';
+
+export const fetchTagsList = createAsyncThunk(
+    "tags/fetchAll",
+    () => axios
+        .get('http://localhost:8000/api/tags/')
+        .then(res => res.data)
+        .catch(err => err)
+);
+
+export const createTag = createAsyncThunk(
+    "tags/add",
+    data  => axios
+        .post('http://localhost:8000/api/tags/', data)
+        .then(res => res.data)
+        .catch(err => err)
+);
+
+export const deleteTag = createAsyncThunk(
+    "tags/delete",
+    tagId  => axios
+        .delete(`http://localhost:8000/api/tags/${tagId}/`)
+        .then(res => tagId)
+        .catch(err => err) 
+);
+
+export const updateTag = createAsyncThunk(
+    "tags/update",
+    updates => axios
+        .patch(`http://localhost:8000/api/tags/${updates.id}/`, updates)
+        .then(res => res.data)
+        .catch(err => err)
+);
 
 export const tagsSlice = createSlice({
   name: 'tags',
   initialState: [],
-  reducers: {
-    add: (state, action) => {
+  reducers: {},
+  extraReducers: {
+    [fetchTagsList.fulfilled]: (state, action) => action.payload,
+    [createTag.fulfilled]: (state, action) => {
         state.push(action.payload)
     },
-    remove: (state, action) => {
-        state = state.filter(e => e.id !== action.payload)
-    },
-    update: (state, action) => {
-        console.log(action);
+    [deleteTag.fulfilled]: (state, action) => state.filter(tag => tag.id !== action.payload),
+    [updateTag.fulfilled]: (state, action) => {
         state.forEach(tag => {
             if (tag.id === action.payload.id) {
-                if (action.payload.title) {
-                    tag.title = action.payload.title
-                }
+                tag.title = action.payload.title
             }
-        })
+        });
     }
   },
 })
-
-// Action creators are generated for each case reducer function
-export const { add, remove, update } = tagsSlice.actions
 
 export default tagsSlice.reducer
 

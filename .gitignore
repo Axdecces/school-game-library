@@ -137,3 +137,7 @@ Pipfile.lock
 migrations/
 media/
 frontend/package-lock.json
+
+# Node
+node_modules/
+package-lock.json

@@ -28,11 +28,11 @@ function Header() {
 	return (
 		<Navbar className='mb-3' bg="primary" variant="dark" expand="sm">
       <Container fluid>
-        <Navbar.Brand as={ Link } to="/games/" href="/games/"><FontAwesomeIcon icon={faGamepad} size="lg" /></Navbar.Brand>
+        <Navbar.Brand as={ Link } to="/games/" href="/games/" ><FontAwesomeIcon icon={faGamepad} size="lg" /></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto" activeKey={ active }>
-            <Nav.Link as={ Link } to="/games/" href="/games/" eventKey="/games/">Games</Nav.Link>
+            <Nav.Link as={ Link } to="/games/" href="/games/" eventKey="/games/" >Games</Nav.Link>
             <Nav.Link as={ Link } to="/categories/" href="/categories/" eventKey="/categories/">Categories</Nav.Link>
           </Nav>
         </Navbar.Collapse>

@@ -1,17 +1,20 @@
-.game-width {
-    width: 300px;
-}
-
 .game-tile {
-    width: 100%;
-    height: 100%;
     background-repeat: no-repeat;
     background-position: center;
-    background-size: cover;
+    background-size: contain;
     border-radius: 5px;
+    background-color: #1C2838;
 
-    margin-left: auto;
-    margin-right: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    h1 {
+        font-size: 2em;
+        z-index: 1;
+        text-overflow: ellipsis;
+    }
 }
 
 .dark-overlay {
@@ -22,12 +25,10 @@
     width: 100%;
     height: 100%;
     z-index: 0;
+    border-radius: 5px;
 }
 
-.game-tile h1 {
-    position: relative;
-    padding: 70px 0;
-    text-align: center;
-    margin: auto;
-    z-index: 1;
+.break-word {
+    max-width: 20ch;
+    word-wrap: break-word;
 }

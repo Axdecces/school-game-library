@@ -1,54 +1,62 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from "axios";
+
+export const fetchGamesList = createAsyncThunk(
+    "games/fetchAll",
+    () => axios
+        .get('http://localhost:8000/api/games/')
+        .then(res => res.data)
+        .catch(err => err)
+);
+
+export const createGame = createAsyncThunk(
+    "games/add",
+    data  => axios
+            .post('http://localhost:8000/api/games/', data)
+            .then(res => res.data)
+            .catch(err => console.log(err))
+);
+
+export const uploadImage = createAsyncThunk(
+    "games/setImage",
+    data => {
+        const formData = new FormData()
+        formData.append('image', data.image);
+        return axios
+            .post(`http://localhost:8000/api/games/${data.id}/set-image/`, formData)
+            .then(res => res.data)
+            .catch(err => console.log(err))
+    }
+);
+
+export const deleteGame = createAsyncThunk(
+    "games/delete",
+    gameId  => axios
+        .delete(`http://localhost:8000/api/games/${gameId}/`)
+        .then(res => gameId)
+        .catch(err => err) 
+);
+
+export const updateGame = createAsyncThunk(
+    "games/update",
+    updates => axios
+        .patch(`http://localhost:8000/api/games/${updates.id}/`, updates)
+        .then(res => res.data)
+        .catch(err => err)
+);
 
 export const gamesSlice = createSlice({
   name: 'games',
   initialState: [],
-  reducers: {
-    add: (state, action) => {
-        state.push(action.payload);
-    },
-    remove: (state, action) => {
-        state = state.filter(e => e.id !== action.payload)
-    },
-    update: (state, action) => {
-        state.forEach(game => {
-            if (game.id === action.payload.id) {
-                if (action.payload.title != null) {
-                    game.title = action.payload.title;
-                }
-                if (action.payload.description != null) {
-                    game.description = action.payload.description;
-                }
-                if (action.payload.release_date != null) {
-                    game.release_date = action.payload.release_date;
-                }
-                if (action.payload.rating != null) {
-                    game.rating = action.payload.rating;
-                }
-                if (action.payload.isFavorite != null) {
-                    game.is_favorite = action.payload.isFavorite;
-                }
-                if (action.payload.preview != null) {
-                    game.preview = action.payload.preview;
-                }
-                if (action.payload.tags != null) {
-                    game.tags = action.payload.tags;
-                }
-                if (action.payload.is_deleted != null) {
-                    game.is_deleted = action.payload.isDeleted;
-                }
-            }
-        })
-    },
-    write: (state, action) => {
-        axios.post();
-    }
+  reducers: {},
+  extraReducers: {
+    [fetchGamesList.fulfilled]: (state, action) => action.payload,
+    [createGame.fulfilled]: (state, action) => [...state, action.payload],
+    [deleteGame.fulfilled]: (state, action) => state.filter(game => game.id !== action.payload),
+    [updateGame.fulfilled]: (state, action) => [...state.filter(game => game.id !== action.payload.id), action.payload],
+    [uploadImage.fulfilled]: (state, action) => [...state.filter(game => game.id !== action.payload.id), action.payload],
   },
 })
-
-// Action creators are generated for each case reducer function
-export const { add, remove, update, save } = gamesSlice.actions
 
 export default gamesSlice.reducer
 

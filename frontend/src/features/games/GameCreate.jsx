@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState } from "react";
+
+import axios from 'axios';
 
 import { useSelector, useDispatch } from 'react-redux';
-
 import { useHistory } from "react-router-dom";
 
-import { selectGameById } from './gamesSlice'
 import { selectAllTags } from "../tags/tagsSlice";
+import { createGame } from "./gamesSlice";
 
-import { updateGame, deleteGame } from "./gamesSlice";
+import Favorite from './Favorite';
+import Rating from './Rating';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -16,7 +17,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Toast from 'react-bootstrap/Toast';
 import ToastContainer from 'react-bootstrap/ToastContainer';
-import Figure from 'react-bootstrap/Figure'
+import Figure from 'react-bootstrap/Figure';
 
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
@@ -24,34 +25,26 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
-import { clientId, token } from "./apiAuth";
+import { clientId, token } from './apiAuth';
 
+function GameCreate() {
 
-
-function GameDetail(props) {
-	const gameId = parseInt(props.match.params.gameId)
-	const game = useSelector(state => selectGameById(state, gameId));
 	const tags = useSelector(selectAllTags);
-	const history = useHistory();
 
 	const [data, setData] = useState({ title: '', description: '', rating: 0, is_favorite: false, tags: [], image:''});
 	const [imageUrl, setImageUrl] = useState('');
-	const [imageLoaded, setImageLoaded] = useState(true);
+	const [imageLoaded, setImageLoaded] = useState(false);
 
 	const [showToast, setShowToast] = useState(false);
 	const [toastMessage, setToastMessage] = useState('');
 
 	const [titleInvalid, setTitleInvalid] = useState(false);
 	const [descriptionInvalid, setDescriptionInvalid]  = useState(false);
-
-	useEffect(() => {
-		if (game) {
-			setImageUrl(game.image);
-			setData({...game})
-		}
-    }, [game]);
+	const [imageInvalid, setImageInvalid] = useState(false);
 
 	const dispatch = useDispatch();
+
+	const history = useHistory();
 
 	function GameTagsList() {
 		return tags.map(tag => 
@@ -61,7 +54,7 @@ function GameDetail(props) {
 					name={tag.id}
 					type='checkbox'
 					id={tag.id}
-					checked={!!data.tags ? data.tags.includes(tag.id) : false}
+					checked={data.tags.includes(tag.id)}
 					onChange={handleSelect}
 				/>
 			</Col>
@@ -75,44 +68,48 @@ function GameDetail(props) {
 
 	const handleSelect = (e) => {
 		if (e.target.checked){
-			console.log(data)
 			setData({...data, tags: [...data.tags, parseInt(e.target.id)]});
 		} else {
 			setData({...data, tags: [data.tags.filter((tag) => tag !== parseInt(e.target.id))]});
 		};
 	}
 
+	const handleFavoriteClick = () => {
+		setData({...data, is_favorite: !data.is_favorite});
+    }
+
+	const handleRatingChange = (rating) => {
+		setData({...data, rating: rating });
+	}
+
 	const handleSave  = () => {
-		console.log(data)
-		if (data.title === '' || data.description === '') {
+		if (data.title === '' || data.description === '' || !data.image) {
 			if (data.title === '') {
 				setTitleInvalid(true);
 			}
 			if (data.description === '') {
 				setDescriptionInvalid(true);
 			}
+			if (!data.image) {
+				setImageInvalid(true);
+			}
 			console.log('Validation faulty')
 			return
 		} else {
 			setTitleInvalid(false);
 			setDescriptionInvalid(false);
+			setImageInvalid(false);
 		}
 		if (!imageLoaded) {
 			setToastMessage('Image was not loaded yet.');
 			setShowToast(true);
 			return
-		} else if (data.image === game.image) {
-			delete data.image;
 		}
+	
 
-		dispatch(updateGame(data));
-		setToastMessage('Saved.')
-		setShowToast(true);
-	}
-
-	const handleDelete = () => {
-		dispatch(deleteGame(gameId));
+		dispatch(createGame(data));
 		history.push('/games/');
+		
 	}
 
 	const handleFileUpload = (e) => {
@@ -127,7 +124,7 @@ function GameDetail(props) {
 
 	const handleSearch = () => {
 		axios({
-			url: 'https://cors-anywhere.herokuapp.com/https://api.igdb.com/v4/games',
+			url: 'http://localhost:8080/https://api.igdb.com/v4/games',
 			method: 'POST',
 			headers: {
 				'Accept': 'application/json',
@@ -149,7 +146,7 @@ function GameDetail(props) {
 
 					setImageUrl(`https://images.igdb.com/igdb/image/upload/t_720p/${image}.jpg`);
 					axios({
-						url : `https://cors-anywhere.herokuapp.com/https://images.igdb.com/igdb/image/upload/t_720p/${image}.jpg`,
+						url : `http://localhost:8080/https://images.igdb.com/igdb/image/upload/t_720p/${image}.jpg`,
 						method: 'GET',
 						responseType: 'blob'
 					})
@@ -170,10 +167,10 @@ function GameDetail(props) {
 
 	return (
 		<Container fluid>
-			<Row>
+			<Row className='mb-3'>
 				<Col />
 				<Col xs={10}>
-					<h1>{game && game.title}</h1>
+					<h1>New Game</h1>
 				</Col>
 				<Col />
 			</Row>
@@ -187,7 +184,7 @@ function GameDetail(props) {
 									<Form.Group className='mb-3' controlId='title'>
 										<Form.Label>Title</Form.Label>
 										<InputGroup>
-											<Form.Control required type='text' placeholder='Title of the game' defaultValue={data.title} onChange={handleChange} isInvalid={titleInvalid}/>
+											<Form.Control required type='text' placeholder='Title of the game' value={data.title} onChange={handleChange} isInvalid={titleInvalid}/>
 											<Button onClick={handleSearch} ><FontAwesomeIcon icon={faMagnifyingGlass} className='icon' /></Button>
 										</InputGroup>
 									</Form.Group>
@@ -221,26 +218,37 @@ function GameDetail(props) {
 							</Col>
 						</Row>
 
+
 						<Row className='mb-3 g-2'>
 							<Form.Label>Categories</Form.Label>
-							{ tags && <GameTagsList />}
+							{tags && <GameTagsList />}
+						</Row>
+						<Row className='mb-3 align-items-center g-2'>
+							<Col xs='auto'>
+								<Form.Label className='m-0'>Favorite?</Form.Label>
+							</Col>
+							<Col xs='auto' className='me-3'>
+								<Favorite isFavorite={data.is_favorite} handleClick={handleFavoriteClick} />
+							</Col>
+							<Col xs='auto'>
+								<Form.Label className='m-0'>Rating</Form.Label>
+							</Col>
+							<Col xs='auto'>
+								<Rating rating={data.rating} handleChange={handleRatingChange} />
+							</Col>
 						</Row>
 
 						<Row className='mb-3 g-2'>
 							<Form.Group controlId="preview">
 							<Form.Label>Preview</Form.Label>
-							<Form.Control type='file' bg='primary' onChange={handleFileUpload}/>
+							<Form.Control type='file' bg='primary' onChange={handleFileUpload} isInvalid={imageInvalid}/>
 							</Form.Group>
 						</Row>
+						
 						<Row className='mb-3 g-2'>
 							<Col xs='auto'>
 								<Button onClick={handleSave}>
-									Save Changes
-								</Button>
-							</Col>
-							<Col xs='auto'>
-								<Button variant='danger' onClick={handleDelete}>
-									Delete Game
+									Save Game
 								</Button>
 							</Col>
 						</Row>
@@ -257,4 +265,4 @@ function GameDetail(props) {
 	);
 }
 
-export default GameDetail;
+export default GameCreate;
