@@ -48,17 +48,17 @@ Start react dev  server.
 npm start
 ```
 
-Get Twitch Api Key by following the [About Page](https://api-docs.igdb.com/#about) and paste the Client-ID and the Api-Token into /frontend/src/feature/games/apiAuth.js
+Get Twitch Api Key by following the [About Page](https://api-docs.igdb.com/#about) and paste the Client-ID and the Api-Token into /frontend/src/feature/games/apiAuth.js. The token has to be renewed manually, which is suboptimal and not usable in production.
 
 ### CORS Proxy
 
-Install Node Modules
+Install Node Modules.
 
 ```console
 npm install
 ```
 
-Start react dev  server
+Start proxy server for adding cors header.
 
 ```console
 npm start
@@ -78,7 +78,6 @@ npm start
 
 - Title
 - Description
-- Release Date
 - Favorite
 - Preview
 - Tags (ManyToMany)

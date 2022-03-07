@@ -26,6 +26,7 @@ function TagsList() {
 		setShow(false);
 		setSelectedTag(0);
 	};
+	
 	const handleShow = id => {
 		setShow(true);
 		setSelectedTag(id);
@@ -68,14 +69,12 @@ function TagsList() {
 	}
 
 	const tagsList = visibleTags.map((tag) => 
-		<Row key={tag.id} className="g-1 justify-space-between align-items-center">
-			<Col sm={11}>
+		<Col key={tag.id}>
+			<div style={{position: 'relative'}}>
 				<Form.Control id={tag.id} type='text' defaultValue={tag.title} placeholder='Name of the Category' onChange={handleChange}/>
-			</Col>
-			<Col sm={1}>
-				<CloseButton id={tag.id} variant="white" style={{marginLeft: '-35px'}} onClick={() => handleShow(tag.id)}/>
-			</Col>
-		</Row>)
+				<CloseButton style={{position: 'absolute', right: '5px', top: '6px'}} id={tag.id} variant="white" onClick={() => handleShow(tag.id)}/>
+			</div>
+		</Col>)
 
 	return (
 		<Container fluid>
@@ -120,20 +119,20 @@ function TagsList() {
 				</Col>
 				<Col />
           	</Row>
-		<Modal show={show} onHide={handleClose}>
-        	<Modal.Header closeButton>
-          		<Modal.Title>Delete Category?</Modal.Title>
-        	</Modal.Header>
-        	<Modal.Body>This will also delete the category from all games it is assigned to.</Modal.Body>
-        	<Modal.Footer>
-          		<Button variant="secondary" onClick={handleClose}>
-            		No
-          		</Button>
-          		<Button variant="primary" onClick={handleDelete}>
-            		Yes
-          		</Button>
-        	</Modal.Footer>
-      		</Modal>
+			<Modal show={show} onHide={handleClose}>
+				<Modal.Header closeButton>
+					<Modal.Title>Delete Category?</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>This will also delete the category from all games it is assigned to.</Modal.Body>
+				<Modal.Footer>
+					<Button variant="secondary" onClick={handleClose}>
+						No
+					</Button>
+					<Button variant="danger" onClick={handleDelete}>
+						Yes
+					</Button>
+				</Modal.Footer>
+			</Modal>
         </Container>
 		
 	)

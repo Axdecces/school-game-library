@@ -95,9 +95,9 @@ function Game(props) {
                 <Modal.Body>
                     <p style={{whiteSpace: 'pre-line'}}>{ game.description }</p>
                 </Modal.Body>
-                <Modal.Footer>
-                    <Rating rating={game.rating} handleChange={handleRatingChange} />
+                <Modal.Footer className='justify-content-between'>
                     <TagsModalPreview tags={gameTags} />
+                    <Rating rating={game.rating} handleChange={handleRatingChange} />
                 </Modal.Footer>
             </Modal>
         </Col>

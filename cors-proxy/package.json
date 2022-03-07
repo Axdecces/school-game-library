@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "HOST=127.0.0.1\nCORSANYWHERE_WHITELIST=http://localhost:3000\nnode node_modules/cors-anywhere/server.js"
+    "start": "HOST=127.0.0.1 CORSANYWHERE_WHITELIST=http://localhost:3000 node node_modules/cors-anywhere/server.js"
   },
   "author": "",
   "license": "ISC",

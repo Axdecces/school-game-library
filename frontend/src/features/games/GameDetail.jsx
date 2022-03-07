@@ -14,9 +14,11 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import Toast from 'react-bootstrap/Toast';
 import ToastContainer from 'react-bootstrap/ToastContainer';
-import Figure from 'react-bootstrap/Figure'
+import Figure from 'react-bootstrap/Figure';
+import Spinner from 'react-bootstrap/Spinner';
 
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
@@ -36,7 +38,11 @@ function GameDetail(props) {
 
 	const [data, setData] = useState({ title: '', description: '', rating: 0, is_favorite: false, tags: [], image:''});
 	const [imageUrl, setImageUrl] = useState('');
+	const [showSpinner, setShowSpinner] = useState(false);
 	const [imageLoaded, setImageLoaded] = useState(true);
+
+
+	const [showModal, setShowModal] = useState(false);
 
 	const [showToast, setShowToast] = useState(false);
 	const [toastMessage, setToastMessage] = useState('');
@@ -122,10 +128,12 @@ function GameDetail(props) {
 		reader.onload = () => {
 			setData({...data, image: reader.result});
 			setImageLoaded(true);
+			setImageUrl('');
 		}
 	}
 
 	const handleSearch = () => {
+		setShowSpinner(true);
 		axios({
 			url: 'https://cors-anywhere.herokuapp.com/https://api.igdb.com/v4/games',
 			method: 'POST',
@@ -147,6 +155,8 @@ function GameDetail(props) {
 					console.log(data);
 					const image = igdbData[0].cover.image_id;
 
+					setShowSpinner(false);
+
 					setImageUrl(`https://images.igdb.com/igdb/image/upload/t_720p/${image}.jpg`);
 					axios({
 						url : `https://cors-anywhere.herokuapp.com/https://images.igdb.com/igdb/image/upload/t_720p/${image}.jpg`,
@@ -166,6 +176,14 @@ function GameDetail(props) {
 				}
 			})
 			.catch(err => console.error(err));
+	}
+
+	const handleClose = () => {
+		setShowModal(false);
+	};
+	
+	const handleShow = () => {
+		setShowModal(true);
 	}
 
 	return (
@@ -203,8 +221,7 @@ function GameDetail(props) {
 								</Row>
 							</Col>
 							<Col sm={2} className='mt-3'>
-								{ imageUrl && 
-								<Row>
+								{ imageUrl && !showSpinner &&
 									<Figure>
 										<Figure.Image
 											width={200}
@@ -216,7 +233,10 @@ function GameDetail(props) {
 											Preview
 										</Figure.Caption>
 									</Figure>
-								</Row>
+								}
+								{ showSpinner && 
+									<Spinner className='mt-3' animation="border" variant="primary" />
+								
 								}
 							</Col>
 						</Row>
@@ -239,7 +259,7 @@ function GameDetail(props) {
 								</Button>
 							</Col>
 							<Col xs='auto'>
-								<Button variant='danger' onClick={handleDelete}>
+								<Button variant='secondary' onClick={handleShow}>
 									Delete Game
 								</Button>
 							</Col>
@@ -248,6 +268,19 @@ function GameDetail(props) {
 				</Col>
 				<Col />
 			</Row>
+			<Modal show={showModal} onHide={handleClose}>
+				<Modal.Header closeButton>
+					<Modal.Title>Delete Game?</Modal.Title>
+				</Modal.Header>
+				<Modal.Footer>
+					<Button variant="secondary" onClick={handleClose}>
+						No
+					</Button>
+					<Button variant="danger" onClick={handleDelete}>
+						Yes
+					</Button>
+				</Modal.Footer>
+			</Modal>
 			<ToastContainer className='p-3 w-auto' position='bottom-center'>
 				<Toast bg='primary' onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide>
 					<Toast.Body>{toastMessage}</Toast.Body>

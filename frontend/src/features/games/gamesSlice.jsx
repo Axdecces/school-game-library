@@ -17,18 +17,6 @@ export const createGame = createAsyncThunk(
             .catch(err => console.log(err))
 );
 
-export const uploadImage = createAsyncThunk(
-    "games/setImage",
-    data => {
-        const formData = new FormData()
-        formData.append('image', data.image);
-        return axios
-            .post(`http://localhost:8000/api/games/${data.id}/set-image/`, formData)
-            .then(res => res.data)
-            .catch(err => console.log(err))
-    }
-);
-
 export const deleteGame = createAsyncThunk(
     "games/delete",
     gameId  => axios
@@ -54,7 +42,6 @@ export const gamesSlice = createSlice({
     [createGame.fulfilled]: (state, action) => [...state, action.payload],
     [deleteGame.fulfilled]: (state, action) => state.filter(game => game.id !== action.payload),
     [updateGame.fulfilled]: (state, action) => [...state.filter(game => game.id !== action.payload.id), action.payload],
-    [uploadImage.fulfilled]: (state, action) => [...state.filter(game => game.id !== action.payload.id), action.payload],
   },
 })
 

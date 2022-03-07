@@ -29,6 +29,8 @@ function GamesList() {
   const [filters, setFilters] = useState([]);
   const [tagFilter, setTagFilter] = useState([]);
 
+  const [sortOptions, setSortOptions] = useState({sortBy: 'title', direction: 'up', type: 'string'})
+
   useEffect(() => {
     setFilteredGames(games);
   }, [games])
@@ -38,7 +40,22 @@ function GamesList() {
       let filtered = games;
   
       filters.forEach(gameFilter => {
-        filtered = games.filter(game => game[gameFilter.attr].toLowerCase().includes(gameFilter.value.toLowerCase().trim()));
+        if (gameFilter.type === 'bool') {
+          if (gameFilter.value === 'true') {
+            filtered = games.filter(game => game[gameFilter.attr] === true)
+          }
+          if (gameFilter.value === 'false') {
+            filtered = games.filter(game => game[gameFilter.attr] === false)
+          }
+        } else if (gameFilter.type === 'number') {
+          if  (gameFilter.value !== '') {
+            filtered = games.filter(game => game[gameFilter.attr] === parseInt(gameFilter.value));
+          }
+        } else {
+          filtered = games.filter(game => game[gameFilter.attr].toLowerCase().includes(gameFilter.value.toLowerCase().trim()));
+        }
+
+        
       });
 
       tagFilter.forEach(tagId => {
@@ -51,34 +68,44 @@ function GamesList() {
   }, [games, filters, tagFilter]);
 
   useEffect(() => {
-    const sortGames = (games, sortBy, direction, type) => {
+    const sortGames = (games) => {
       return [...games].sort((a, b) => {
-        if (type === 'string') {
-          if (direction === 'up') {
-            return a[sortBy].localeCompare(b[sortBy])
+        if (sortOptions.type === 'string') {
+          if (sortOptions.direction === 'up') {
+            return a[sortOptions.sortBy].localeCompare(b[sortOptions.sortBy])
           }
           else {
-            return b[sortBy].localeCompare(a[sortBy])
+            return b[sortOptions.sortBy].localeCompare(a[sortOptions.sortBy])
           }
         } else {
-          if (direction === 'up') {
-            return  a[sortBy] - b[sortBy]
+          if (sortOptions.direction === 'up') {
+            return  a[sortOptions.sortBy] - b[sortOptions.sortBy]
           } else {
-            return b[sortBy] - a[sortBy]
+            return b[sortOptions.sortBy] - a[sortOptions.sortBy]
           }
         }
 
       })
     }
-    setSortedGames(sortGames(filteredGames, 'title', 'up', 'string'));
-  }, [filteredGames])
+    setSortedGames(sortGames(filteredGames));
+  }, [filteredGames, sortOptions])
 
 
   const handleFilterChange = e => {
     const attr = e.target.id;
-    var value = e.target.value;
+    const value = e.target.value;
 
-    setFilters([...filters, {attr: attr, value: value}]);
+    let type
+
+    if (attr === 'is_favorite') {
+      type = 'bool'
+    } else if (attr === 'rating') {
+      type = 'number'
+    } else {
+      type = 'text'
+    }
+
+    setFilters([...filters.filter(filter => filter.attr !== attr), {attr: attr, value: value, type: type}]);
   }
 
   const handleFilterSelectChange = e => {
@@ -90,6 +117,11 @@ function GamesList() {
     } else {
       setTagFilter(tagFilter.filter(e => e !== tagId ));
     }
+  }
+
+  const handleSortChange = e => {
+    const value = e.target.value.split(" ");
+    setSortOptions({sortBy: value[0], direction: value[1], type: value[2]})
   }
 
 
@@ -104,8 +136,8 @@ function GamesList() {
       <Row className='mb-3'>
 				<Col />
         <Col xs={10}>
-          <h2>Filter</h2>
-          <Row xs={1} sm={2} lg={3} xxl={4} className="g-5">
+          <Row><h2>Filter</h2></Row>
+          <Row xs={1} sm={2} lg={3} xxl={4} className="gx-5">
             <Col className="filter">
               <Form.Group className='mb-3' controlId='title'>
                 <Form.Label>Title</Form.Label>
@@ -118,13 +150,43 @@ function GamesList() {
                 <Form.Control type='text' placeholder='Filter Description' className='filter' onChange={handleFilterChange} />
               </Form.Group>
             </Col>
+            <Col className="filter">
+              <Form.Group className='mb-3' controlId='rating'>
+                <Form.Label>Rating</Form.Label>
+                <Form.Control min={0} max={5} type='number' placeholder='Filter Rating' className='filter' onChange={handleFilterChange} />
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group className='mb-3' controlId='is_favorite'>
+                <Form.Label>Favorite?</Form.Label>
+                <Form.Select className='filter' aria-label="Filter for favorites" onChange={handleFilterChange}>
+                  <option value='unset'>Show all</option>
+                  <option value='true'>Yes</option>
+                  <option value='false'>No</option>
+                </Form.Select>
+              </Form.Group>
+            </Col>
+          </Row>
+          <Row xs={1} sm={2} lg={3} xxl={4} className="gx-5">
+            <Col>
+              <Form.Group className='mb-3' controlId='is_favorite'>
+                <Form.Label>Sort By</Form.Label>
+                <Form.Select className='filter' aria-label="Filter for favorites" onChange={handleSortChange}>
+                  <option value='title up string'>Title &uarr;</option>
+                  <option value='title down string'>Title &darr;</option>
+                  <option value='rating up number'>Rating &uarr;</option>
+                  <option value='rating down number'>Rating &darr;</option>
+
+                </Form.Select>
+              </Form.Group>
+            </Col>
           </Row>
           <Row className='mb-3'>
             <Col>
               <Form.Group className='mb-3' controlId='tags'>
                 <Form.Label>Categories</Form.Label>
                 <div>
-                  { 
+                  { tags &&
                     tags.map(tag => 
                       <Form.Check
                         inline

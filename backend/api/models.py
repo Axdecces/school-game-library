@@ -1,7 +1,5 @@
 from django.db import models
 
-# Create your models here.
-
 class Tag(models.Model):
 	title = models.CharField(max_length=120)
 	is_deleted = models.BooleanField(default=False)

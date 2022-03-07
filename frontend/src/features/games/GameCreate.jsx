@@ -18,6 +18,7 @@ import Button from 'react-bootstrap/Button';
 import Toast from 'react-bootstrap/Toast';
 import ToastContainer from 'react-bootstrap/ToastContainer';
 import Figure from 'react-bootstrap/Figure';
+import Spinner from 'react-bootstrap/Spinner';
 
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
@@ -33,7 +34,8 @@ function GameCreate() {
 
 	const [data, setData] = useState({ title: '', description: '', rating: 0, is_favorite: false, tags: [], image:''});
 	const [imageUrl, setImageUrl] = useState('');
-	const [imageLoaded, setImageLoaded] = useState(false);
+	const [showSpinner, setShowSpinner] = useState(false);
+	const [imageLoaded, setImageLoaded] = useState(true);
 
 	const [showToast, setShowToast] = useState(false);
 	const [toastMessage, setToastMessage] = useState('');
@@ -119,10 +121,12 @@ function GameCreate() {
 		reader.onload = () => {
 			setData({...data, image: reader.result});
 			setImageLoaded(true);
+			setImageUrl('');
 		}
 	}
 
 	const handleSearch = () => {
+		setShowSpinner(true);
 		axios({
 			url: 'http://localhost:8080/https://api.igdb.com/v4/games',
 			method: 'POST',
@@ -141,8 +145,9 @@ function GameCreate() {
 
 				} else {
 					setData(state => {return {...state, title: igdbData[0].name, description: igdbData[0].summary}});
-					console.log(data);
 					const image = igdbData[0].cover.image_id;
+
+					setShowSpinner(false);
 
 					setImageUrl(`https://images.igdb.com/igdb/image/upload/t_720p/${image}.jpg`);
 					axios({
@@ -200,8 +205,7 @@ function GameCreate() {
 								</Row>
 							</Col>
 							<Col sm={2} className='mt-3'>
-								{ imageUrl && 
-								<Row>
+								{ imageUrl && !showSpinner &&
 									<Figure>
 										<Figure.Image
 											width={200}
@@ -213,7 +217,11 @@ function GameCreate() {
 											Preview
 										</Figure.Caption>
 									</Figure>
-								</Row>
+								}
+
+								{ showSpinner && 
+									<Spinner className='mt-3' animation="border" variant="primary" />
+								
 								}
 							</Col>
 						</Row>
