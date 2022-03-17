@@ -42,7 +42,6 @@ function GamesList() {
       filters.forEach(gameFilter => {
         if (gameFilter.type === 'bool') {
           if (gameFilter.value === 'true') {
-            filtered = games.filter(game => game[gameFilter.attr] === true)
             filtered = filtered.filter(game => game[gameFilter.attr] === true)
           }
           if (gameFilter.value === 'false') {
