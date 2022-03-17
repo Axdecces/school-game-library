@@ -132,7 +132,7 @@ function GameDetail(props) {
 	const handleSearch = () => {
 		setShowSpinner(true);
 		axios({
-			url: 'https://cors-anywhere.herokuapp.com/https://api.igdb.com/v4/games',
+			url: 'http://localhost:8080/https://api.igdb.com/v4/games',
 			method: 'POST',
 			headers: {
 				'Accept': 'application/json',
@@ -153,7 +153,7 @@ function GameDetail(props) {
 
 					setImageUrl(`https://images.igdb.com/igdb/image/upload/t_720p/${image}.jpg`);
 					axios({
-						url : `https://cors-anywhere.herokuapp.com/https://images.igdb.com/igdb/image/upload/t_720p/${image}.jpg`,
+						url : `http://localhost:8080/https://images.igdb.com/igdb/image/upload/t_720p/${image}.jpg`,
 						method: 'GET',
 						responseType: 'blob'
 					})

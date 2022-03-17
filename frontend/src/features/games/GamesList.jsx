@@ -43,16 +43,17 @@ function GamesList() {
         if (gameFilter.type === 'bool') {
           if (gameFilter.value === 'true') {
             filtered = games.filter(game => game[gameFilter.attr] === true)
+            filtered = filtered.filter(game => game[gameFilter.attr] === true)
           }
           if (gameFilter.value === 'false') {
-            filtered = games.filter(game => game[gameFilter.attr] === false)
+            filtered = filtered.filter(game => game[gameFilter.attr] === false)
           }
         } else if (gameFilter.type === 'number') {
           if  (gameFilter.value !== '') {
-            filtered = games.filter(game => game[gameFilter.attr] === parseInt(gameFilter.value));
+            filtered = filtered.filter(game => game[gameFilter.attr] === parseInt(gameFilter.value));
           }
         } else {
-          filtered = games.filter(game => game[gameFilter.attr].toLowerCase().includes(gameFilter.value.toLowerCase().trim()));
+          filtered = filtered.filter(game => game[gameFilter.attr].toLowerCase().includes(gameFilter.value.toLowerCase().trim()));
         }
 
         
